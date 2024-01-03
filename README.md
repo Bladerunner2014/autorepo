@@ -12,12 +12,9 @@
 Run the following command in the project root:
 ```bash
 # clone the project
-git clone https://github.com/mohammad-mahdi-rajabi/waste-management.git
+git clone https://github.com/Bladerunner2014/autorepo.git
 
-# or usin ssh
-git clone git@github.com:mohammad-mahdi-rajabi/waste-management.git
-
-cd waste-management
+cd autorepo
 
 # run project with docker and docker-compose
 docker-compose up -d
@@ -28,7 +25,7 @@ version: '3'
 
 services:
 
-  wst-mng:
+  autorepo:
     build: .
 #    command: gunicorn core.wsgi:application --bind 0.0.0.0:8000
     expose:
@@ -45,7 +42,7 @@ services:
     environment:
       POSTGRES_USER: 'postgres'
       POSTGRES_PASSWORD: '1234'
-      POSTGRES_DB: form
+      POSTGRES_DB: vehicle
 #  nginx:
 #    build: ./nginx
 #    restart: always
