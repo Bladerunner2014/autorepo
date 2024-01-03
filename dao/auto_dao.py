@@ -1,36 +1,36 @@
-from sqlalchemy.orm import Session
-from schemas.schemas import Autoschema
+from schemas import schemas
 from models.models import Auto
 
 
-def get_car(db: Session, car_id: int):
-    return db.query(Auto.car_id).filter(Auto.car_id == car_id).first()
+def get_car_by_plate(db, plate: str):
+    one_car = db.query(Auto).filter(Auto.plate_number == plate).first()
+    db.close()
+
+    return one_car
 
 
-def get_car_by_plate(db: Session, plate: str):
-    return db.query(Auto.plate_number).filter(Auto.plate_number == plate).first()
+def get_cars(db, skip: int = 0, limit: int = 100):
+    cars = db.query(Auto).offset(skip).limit(limit).all()
+    db.close()
+
+    return cars
 
 
-def get_cars(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(Auto).offset(skip).limit(limit).all()
-
-
-def create_car(db: Session, car:Autoschema):
-    db.add(car)
+def delete_car(db, plate: str):
+    item = db.query(Auto).filter(Auto.plate_number == plate).first()
+    db.delete(item)
     db.commit()
-    db.refresh(car)
-    return car
+    db.close()
+    return "item"
 
 
-# def get_items(db: Session, skip: int = 0, limit: int = 100):
-#     return db.query(models.Item).offset(skip).limit(limit).all()
-#
-#
-# def create_user_item(db: Session, item: schemas.ItemCreate, user_id: int):
-#     db_item = models.Item(**item.dict(), owner_id=user_id)
-#     db.add(db_item)
-#     db.commit()
-#     db.refresh(db_item)
-#     return db_item
-#
+def create_car(db, car: schemas.Autoschema):
+    car_itam = Auto(auto_name=car.auto_name, plate_number=car.plate_number, sim_number=car.sim_number,
+                    car_model=car.car_model, disabled=car.disabled, connection_status=car.connection_status)
+    db.add(car_itam)
+    db.commit()
+    db.refresh(car_itam)
+    db.close()
+    return car_itam
 
+# TODO UPDATE CAR
