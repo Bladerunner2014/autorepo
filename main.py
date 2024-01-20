@@ -1,6 +1,6 @@
 from fastapi import HTTPException, status
 from fastapi.responses import ORJSONResponse
-import httpx
+import requests
 from models import models
 from schemas import schemas
 from db.orm_database import SessionLocal, engine
@@ -10,6 +10,7 @@ import logging
 from log import log
 from fastapi.middleware.cors import CORSMiddleware
 from dao import auto_dao
+import json
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -74,7 +75,7 @@ def update_car(car: schemas.Autoschema):
 
 
 @app.post("/assign/")
-def assign(car_plate: str, driver_id: str):
+def assign(car_plate: str, driver_id: int):
     db = SessionLocal()
 
     plate = auto_dao.get_car_by_plate(db, plate=car_plate)
@@ -83,19 +84,18 @@ def assign(car_plate: str, driver_id: str):
 
     if plate.assigned_to is not None:
         raise HTTPException(status_code=404, detail="car already in use")
-
+    try:
+        response = requests.post(config["DRIVER_REPO"], params={'car_plate': car_plate, "driver_id": driver_id})
+    except Exception as error:
+        logger.error("error in sending request to drivers repo")
+        logger.error(error)
+        raise Exception
     # TODO: UPDATE CAR
     plate.assigned_to = driver_id
     auto_dao.update_car(db, plate)
 
-    # try:
-    #     response = httpx.post(config["DRIVER_REPO"], data={'car_plate': car_plate, "driver_id": driver_id})
-    # except Exception as error:
-    #     logger.error("error in sending request to drivers repo")
-    #     logger.error(error)
-    #     raise Exception
-    # return response.status_code, response.json()
-    return ORJSONResponse(status_code=status.HTTP_200_OK, content={"message": "car assigned successfully!"})
+    return response.status_code, response.json()
+    # return response.content
 
 
 log.setup_logger()
