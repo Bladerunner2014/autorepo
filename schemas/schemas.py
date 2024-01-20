@@ -11,8 +11,7 @@ class Autoschema(BaseModel):
     plate_number: str
     created_at: str | None = None
     last_active_at: str | None = None
+    assigned_to: str | None = None
 
     class Config:
         orm_mode = True
-
-

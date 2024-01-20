@@ -16,3 +16,4 @@ class Auto(Base):
     plate_number = Column(String)
     created_at = Column(String, default=datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S.%f"))
     last_active_at = Column(String, default=datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S.%f"))
+    assigned_to = Column(String)
