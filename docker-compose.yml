@@ -1,37 +1,29 @@
 version: '3'
 
 services:
-  waste_management:
+  auto:
     build: .
-    command: uvicorn main:app --host 0.0.0.0
+    command: sh -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8000"
+
     volumes:
-      - .:/waste_management
+      - .:/auto
     ports:
       - "8008:8000"
     depends_on:
-      - mongodb
       - postgres
 
-  mongodb:
-    image: mongo
-#    ports:
-#      - "27017"
-    volumes:
-      - type: bind
-        source: ./data
-        target: /data/db
 
   postgres:
     image: postgres
-#    ports:
-#      - "5432"
+    ports:
+      - "5432"
     volumes:
       - db:/var/lib/postgresql/data
 
     environment:
       POSTGRES_USER: 'postgres'
       POSTGRES_PASSWORD: '1234'
-      POSTGRES_DB: wm
+      POSTGRES_DB: otol
 
 volumes:
   db:

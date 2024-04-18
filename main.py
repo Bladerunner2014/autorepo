@@ -11,6 +11,8 @@ from log import log
 from fastapi.middleware.cors import CORSMiddleware
 from dao import auto_dao
 import json
+from datetime import datetime
+from datetime import timezone
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -67,11 +69,22 @@ def delete_car(car_plate: str):
     return ORJSONResponse(status_code=status.HTTP_200_OK, content={"message": "car deleted successfully"})
 
 
-@app.patch("/auto/")
 def update_car(car: schemas.Autoschema):
     db = SessionLocal()
-    db_user = auto_dao.update_car(db, car)
-    return db_user
+    try:
+        existing_car = db.query(models.Auto).filter(models.Auto.plate_number == car.plate_number).first()
+        if existing_car:
+            # Update existing car
+            for key, value in car.dict().items():
+                setattr(existing_car, key, value)
+        else:
+            # Create new car
+            db.add(models.Auto(**car.dict()))
+        db.commit()
+        db.refresh(existing_car)
+    finally:
+        db.close()
+    return existing_car
 
 
 @app.post("/assign/")
@@ -91,6 +104,7 @@ def assign(car_plate: str, driver_id: int):
         logger.error(error)
         raise Exception
     # TODO: UPDATE CAR
+    plate.last_active_at = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S.%f")
     plate.assigned_to = driver_id
     auto_dao.update_car(db, plate)
 

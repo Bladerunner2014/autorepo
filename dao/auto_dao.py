@@ -49,11 +49,11 @@ def create_car(db, car: schemas.Autoschema):
 
 # TODO UPDATE CAR
 def update_car(db, car: Auto):
-    delete_car(db, car.plate_number)
-    car = object_as_dict(car)
-    car_itam = Auto(**car)
-    db.add(car_itam)
-    db.commit()
-    db.refresh(car_itam)
-    db.close()
-    return
+    existing_car = db.query(Auto).filter(Auto.plate_number == car.plate_number).first()
+    if existing_car:
+        # Update relevant fields
+        for attr, value in car.dict().items():
+            setattr(existing_car, attr, value)
+        db.commit()
+        db.refresh(existing_car)
+    return existing_car

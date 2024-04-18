@@ -1,7 +1,9 @@
 from sqlalchemy import Boolean, Column, Integer, String
-from db.orm_database import Base
+from sqlalchemy.ext.declarative import declarative_base
+
 from datetime import datetime
 from datetime import timezone
+Base = declarative_base()
 
 
 class Auto(Base):
