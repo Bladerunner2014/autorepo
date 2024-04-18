@@ -59,7 +59,7 @@ def read_car(car_plate):
     return plate
 
 
-@app.delete("/users/{car_plate}", response_model=schemas.Autoschema)
+@app.delete("/cars/{car_plate}", response_model=schemas.Autoschema)
 def delete_car(car_plate: str):
     db = SessionLocal()
     db_user = auto_dao.get_car_by_plate(db, car_plate)
@@ -69,6 +69,7 @@ def delete_car(car_plate: str):
     return ORJSONResponse(status_code=status.HTTP_200_OK, content={"message": "car deleted successfully"})
 
 
+@app.patch("/car/", response_model=schemas.Autoschema)
 def update_car(car: schemas.Autoschema):
     db = SessionLocal()
     try:
@@ -77,9 +78,9 @@ def update_car(car: schemas.Autoschema):
             # Update existing car
             for key, value in car.dict().items():
                 setattr(existing_car, key, value)
-        else:
-            # Create new car
-            db.add(models.Auto(**car.dict()))
+        # else:
+        #     # Create new car
+        #     db.add(models.Auto(**car.dict()))
         db.commit()
         db.refresh(existing_car)
     finally:
@@ -112,4 +113,4 @@ def assign(car_plate: str, driver_id: int):
     # return response.content
 
 
-log.setup_logger()
+# log.setup_logger()
