@@ -17,3 +17,11 @@ class InfoMessage:
     USER_CREATED = "user created successfully"
     EMAIL = "email sent"
     UPDATE_FORM = "form structure already exists in database, updating form structure."
+    CREATE_AUTO = "auto created"
+    DUPLICATE_AUTO = "duplicate auto plate"
+    DUPLICATE_DRIVER = "duplicate driver phone number"
+    CREATE_DRIVER = "driver created"
+    DUPLICATE_ASSIGN = "duplicate assign"
+
+
+
