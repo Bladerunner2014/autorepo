@@ -17,17 +17,20 @@ class DBconnect:
         password = urllib.parse.quote_plus("poiuytrewq")
         port = config["MONGO_PORT"]
         try:
-            client = pymongo.MongoClient("mongodb://%s:%s@mongodb:%s/" % (username, password, port))
-
+            client = pymongo.MongoClient(f"mongodb://{username}:{password}@mongodb:{port}/?authSource=admin")
+            self.logger.info("Successfully connected to MongoDB")
+        except pymongo.errors.OperationFailure as error:
+            self.logger.error(f"Authentication failed: {error}")
+            raise
         except Exception as error:
-            self.logger.error(error)
-            raise Exception
+            self.logger.error(f"Connection error: {error}")
+            raise
 
         try:
             database = client[self.database]
             collection = database[self.collection]
         except Exception as error:
-            self.logger.error(error)
-            raise Exception
+            self.logger.error(f"Database/Collection error: {error}")
+            raise
 
         return collection
