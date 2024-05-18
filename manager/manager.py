@@ -21,10 +21,10 @@ class DriverManager:
         self.dao = Dao(config["MONGO_DB_DRIVER_COLLECTION"])
 
     def creator(self, driver: schemas.Driver) -> ORJSONResponse:
-        check = self.dao.find_one(condition={"phone_number": driver.phone_number})
-        if check:
-            return ORJSONResponse(content={"message": InfoMessage.DUPLICATE_DRIVER},
-                                  status_code=status.HTTP_400_BAD_REQUEST)
+        # check = self.dao.find_one(condition={"phone_number": driver.phone_number})
+        # if check:
+        #     return ORJSONResponse(content={"message": InfoMessage.DUPLICATE_DRIVER},
+        #                           status_code=status.HTTP_400_BAD_REQUEST)
 
         res = self.dao.insert_one(document=driver.model_dump())
         # logger.info(InfoMessage.CREATE_DRIVER)
