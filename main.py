@@ -128,6 +128,14 @@ def read_assign(assign_id):
     return res
 
 
+@app.get("/assign/deactivate", tags=["Assignment"])
+def deactivate_assign(assign_id):
+    m = AssignManager()
+    res = m.deactivate(assign_id)
+
+    return res
+
+
 @app.delete("/assign/", tags=["Assignment"])
 def delete_assign(assign_id: str):
     m = AssignManager()

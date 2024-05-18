@@ -1,4 +1,4 @@
-pymongo~=4.4.1
+pymongo
 python-dotenv~=1.0.0
 pydantic~=2.1.1
 fastapi~=0.101.1

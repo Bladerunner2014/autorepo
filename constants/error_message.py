@@ -13,6 +13,7 @@ class ErrorMessage:
     DB_PUT_CONNECTION_TO_POOL = "db put connection to pool error"
     DB_SELECT = "db select error"
     DB_DELETE = "document delete failed"
+    DISABLED = "driver or auto is disabled"
 
     FILE = "File too large"
     ROLE = "User role is not consistent with the request"

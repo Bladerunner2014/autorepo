@@ -1,29 +1,29 @@
 version: '3'
 
 services:
-  auto:
+  fleet:
     build: .
-    command: sh -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8000"
+    command: sh -c "uvicorn main:app --host 0.0.0.0 --port 8000"
 
     volumes:
-      - .:/auto
+      - logs:/log
     ports:
       - "8000:8000"
-    depends_on:
-      - postgres
 
-
-  postgres:
-    image: postgres
-    ports:
-      - "5432"
-    volumes:
-      - db:/var/lib/postgresql/data
-
+  mongodb:
+    image: mongo
+    restart: always
+    expose:
+      - "27017"
     environment:
-      POSTGRES_USER: 'postgres'
-      POSTGRES_PASSWORD: '1234'
-      POSTGRES_DB: otol
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=poiuytrewq
+    volumes:
+      - type: bind
+        source: ../data
+        target: /data/db
 
 volumes:
-  db:
+  mongodb-data:
+  logs:
+

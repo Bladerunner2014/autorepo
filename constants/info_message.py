@@ -22,6 +22,7 @@ class InfoMessage:
     DUPLICATE_DRIVER = "duplicate driver phone number"
     CREATE_DRIVER = "driver created"
     DUPLICATE_ASSIGN = "duplicate assign"
+    DEACTIVATED = "assignment deactivate"
 
 
 

@@ -44,5 +44,6 @@ class Assignment(Base):
     phone_number = Column(Integer, primary_key=True, index=True)
     plate_number = Column(String, primary_key=True, index=True)
     assign_id = Column(String, default=unique_id.prefix)
+    active = Column(Boolean, default=True)
     created_by = Column(String, primary_key=True, index=True)
     created_at = Column(String, default=datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S.%f"))

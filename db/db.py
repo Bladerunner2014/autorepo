@@ -17,7 +17,7 @@ class DBconnect:
         password = urllib.parse.quote_plus("poiuytrewq")
         port = config["MONGO_PORT"]
         try:
-            client = pymongo.MongoClient("mongodb://%s:%s@localhost:%s/" % (username, password, port))
+            client = pymongo.MongoClient("mongodb://%s:%s@mongodb:%s/" % (username, password, port))
 
         except Exception as error:
             self.logger.error(error)
