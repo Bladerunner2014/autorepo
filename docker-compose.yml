@@ -17,14 +17,5 @@ services:
     restart: always
     expose:
       - "27017"
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=poiuytrewq
-    volumes:
-      - type: bind
-        source: ../data
-        target: /data/db
-
 volumes:
-  mongodb-data:
   logs:
