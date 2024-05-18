@@ -1,21 +1,19 @@
 import pymongo
 import logging
-from dotenv import dotenv_values
+import os
 import urllib.parse
 
-config = dotenv_values(".env")
-
-
+# Instead of dotenv, using os.environ to fetch environment variables
 class DBconnect:
     def __init__(self, collection):
-        self.database = config["MONGO_DB"]
+        self.database = os.environ.get("MONGO_DB")
         self.collection = collection
         self.logger = logging.getLogger(__name__)
 
     def connect(self):
         username = urllib.parse.quote_plus("admin")
         password = urllib.parse.quote_plus("poiuytrewq")
-        port = config["MONGO_PORT"]
+        port = os.environ.get("MONGO_PORT", "27017")
         try:
             client = pymongo.MongoClient(f"mongodb://{username}:{password}@mongodb:{port}/?authSource=admin")
             self.logger.info("Successfully connected to MongoDB")
