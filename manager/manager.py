@@ -106,7 +106,7 @@ class AutoManager:
             return ORJSONResponse(content={"message": InfoMessage.NOT_FOUND}, status_code=status.HTTP_404_NOT_FOUND)
 
         u = self.dao.update(condition={"plate_number": car_plate}, new_values=new_values)
-        return ORJSONResponse(content=u, status_code=status.HTTP_200_OK)
+        return ORJSONResponse(content=u.raw_result, status_code=status.HTTP_200_OK)
 
 
 class AssignManager:
