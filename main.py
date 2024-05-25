@@ -4,7 +4,7 @@ from fastapi import FastAPI
 import logging
 # from log import log
 from fastapi.middleware.cors import CORSMiddleware
-from manager.manager import DriverManager, AutoManager, AssignManager
+from manager.manager import DriverManager, AutoManager, Service
 
 app = FastAPI()
 origins = [
@@ -104,42 +104,46 @@ def update_driver(phone_number, driver: dict):
     return res
 
 
-@app.post("/assign/", response_model=schemas.Assignment, tags=["Assignment"])
-def create_assign(assign: schemas.Assignment):
-    m = AssignManager()
-    res = m.creator(assign)
+"""Services"""
+
+
+@app.post("/service/", response_model=schemas.Service, tags=["Service"])
+def create_service(service: schemas.Service):
+    handler = Service()
+    res = handler.creator(service)
 
     return res
 
 
-@app.get("/assign/", tags=["Assignment"])
-def read_assigns():
-    m = AssignManager()
-    res = m.all()
+@app.get("/service/", tags=["Service"])
+def read_services():
+    handler = Service()
+    res = handler.all()
 
     return res
 
 
-@app.get("/assign/{assign_id}", response_model=schemas.Assignment, tags=["Assignment"])
-def read_assign(assign_id):
-    m = AssignManager()
-    res = m.reader(assign_id)
+@app.get("/service/{service_id}", response_model=schemas.Service, tags=["Service"])
+def read_service(service_id):
+    handler = Service()
+    res = handler.reader(service_id)
 
     return res
 
 
-@app.get("/assign/deactivate", tags=["Assignment"])
-def deactivate_assign(assign_id):
-    m = AssignManager()
-    res = m.deactivate(assign_id)
+@app.delete("/service/", tags=["Service"])
+def delete_service(service_id: str):
+    handler = Service()
+    res = handler.delete(service_id)
 
     return res
 
 
-@app.delete("/assign/", tags=["Assignment"])
-def delete_assign(assign_id: str):
-    m = AssignManager()
-    res = m.delete(assign_id)
+@app.patch("/service/", tags=["Service"])
+def update_service(service_id, service: dict):
+    handler = Service()
+    res = handler.update(service_id=service_id, new_values=service)
 
     return res
+
 # log.setup_logger()

@@ -109,67 +109,45 @@ class AutoManager:
         return ORJSONResponse(content=u.raw_result, status_code=status.HTTP_200_OK)
 
 
-class AssignManager:
-
+class Service:
     def __init__(self):
-        self.dao = Dao(config["MONGO_DB_ASSIGN_COLLECTION"])
+        self.dao = Dao(config["MONGO_DB_SERVICE_COLLECTION"])
 
-    def deactivate(self, assign_id: str):
-        check = self.dao.find_one(condition={"assign_id": assign_id})
-        if not check:
-            return ORJSONResponse(content={"message": InfoMessage.NOT_FOUND}, status_code=status.HTTP_404_NOT_FOUND)
-        u = self.dao.update(condition={"assign_id": assign_id}, new_values={"active": False})
-        return ORJSONResponse(content={"message": InfoMessage.DEACTIVATED}, status_code=status.HTTP_200_OK)
+    def creator(self, service: schemas.Service) -> ORJSONResponse:
+        res = self.dao.insert_one(document=service.dict())
+        # logger.info(InfoMessage.CREATE_DRIVER)
 
-    def creator(self, assign: schemas.Assignment) -> ORJSONResponse:
+        return ORJSONResponse(content=res, status_code=status.HTTP_200_OK)
 
-        check = self.dao.find_one(condition={"plate_number": assign.plate_number, "phone_number": assign.phone_number})
-        if check:
-            return ORJSONResponse(content={"message": InfoMessage.DUPLICATE_ASSIGN},
-                                  status_code=status.HTTP_400_BAD_REQUEST)
-        if self.checker(plate_number=assign.plate_number, phone_number=assign.phone_number):
-            res = self.dao.insert_one(document=assign.dict())
-            res = ORJSONResponse(content=res, status_code=status.HTTP_200_OK)
-
-        else:
-            res = ORJSONResponse(content={"message": ErrorMessage.DISABLED}, status_code=status.HTTP_400_BAD_REQUEST)
-        # logger.info(InfoMessage.CREATE_AUTO)
-
-        return res
-
-    def all(self):
-        assign = self.dao.find(condition={})
-        if not assign:
-            return ORJSONResponse(content={"message": InfoMessage.NOT_FOUND},
-                                  status_code=status.HTTP_400_BAD_REQUEST)
-        return ORJSONResponse(content=assign,
-                              status_code=status.HTTP_400_BAD_REQUEST)
-
-    def reader(self, assign_id: str) -> ORJSONResponse:
-        res = self.dao.find_one(condition={"assign_id": assign_id})
+    def reader(self, service_id: str) -> ORJSONResponse:
+        res = self.dao.find_one(condition={"service_id": service_id})
         if res:
             return ORJSONResponse(content=res, status_code=status.HTTP_200_OK)
 
         return ORJSONResponse(content={"message": InfoMessage.NOT_FOUND}, status_code=status.HTTP_404_NOT_FOUND)
 
-    def delete(self, assign_id: str) -> ORJSONResponse:
-        res = self.dao.find_one(condition={"assign_id": assign_id})
+    def all(self):
+        services = self.dao.find(condition={})
+        if not services:
+            return ORJSONResponse(content={"message": InfoMessage.NOT_FOUND},
+                                  status_code=status.HTTP_400_BAD_REQUEST)
+        return ORJSONResponse(content=services,
+                              status_code=status.HTTP_200_OK)
+
+    def delete(self, service_id: str) -> ORJSONResponse:
+        res = self.dao.find_one(condition={"service_id": service_id})
         if not res:
             return ORJSONResponse(content={"message": InfoMessage.NOT_FOUND}, status_code=status.HTTP_404_NOT_FOUND)
 
-        d = self.dao.delete(condition={"assign_id": assign_id})
+        d = self.dao.delete(condition={"service_id": service_id})
         return ORJSONResponse(content={"message": InfoMessage.DB_DELETE}, status_code=status.HTTP_200_OK)
 
-    def checker(self, plate_number: str, phone_number: str):
-        self.auto_dao = Dao(config["MONGO_DB_AUTO_COLLECTION"])
-        self.driver_dao = Dao(config["MONGO_DB_DRIVER_COLLECTION"])
+    def update(self, service_id: str, new_values: dict) -> ORJSONResponse:
+        res = self.dao.find_one(condition={"service_id": service_id})
+        if not res:
+            return ORJSONResponse(content={"message": InfoMessage.NOT_FOUND}, status_code=status.HTTP_404_NOT_FOUND)
 
-        p = self.auto_dao.find_one(condition={"plate_number": plate_number})
-        d = self.driver_dao.find_one(condition={"phone_number": phone_number})
-        if p == True or d == True:
-            res = True
-            return res
-
-        return False
+        u = self.dao.update(condition={"service_id": service_id}, new_values=new_values)
+        return ORJSONResponse(content=u, status_code=status.HTTP_200_OK)
 
     # log.setup_logger()

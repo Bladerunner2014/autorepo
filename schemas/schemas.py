@@ -8,6 +8,14 @@ from datetime import timezone
 unique_id = IDGenerator("L")
 
 
+class Service(BaseModel):
+    service_id: str = Field(default_factory=unique_id.generate_custom_id)
+    title: str
+    service_description: Optional[str] = None
+    cost_per_service: Optional[str] = None
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S.%f"))
+
+
 class Auto(BaseModel):
     plate_number: str
     auto_name: str
@@ -45,26 +53,6 @@ class Driver(BaseModel):
 
     # last_trip = Column(String, default=datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S.%f"))
     # assigned_car = Column(String)
-    class Config:
-        schema_extra = {
-            "example": {
-                "fullname": "John Doe",
-                "email": "jdoe@x.edu.ng",
-                "course_of_study": "Water resources and environmental engineering",
-                "year": 4,
-                "gpa": "4.0",
-            }
-        }
-
-
-class Assignment(BaseModel):
-    phone_number: str
-    plate_number: str
-    assign_id: str = Field(default=unique_id.generate_custom_id())
-    active: bool = Field(default=True)
-    created_by: str
-    created_at: str = Field(default=datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S.%f"))
-
     class Config:
         schema_extra = {
             "example": {
