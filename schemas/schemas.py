@@ -25,7 +25,7 @@ class Auto(BaseModel):
     disabled: bool = Field(default=True)
     color: str
     created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S.%f"))
-    car_id: str = Field(default_factory=unique_id.generate_custom_id())
+    car_id: str = Field(default_factory=unique_id.generate_custom_id)  # Pass the method without calling it
 
 
 class Config:
@@ -47,7 +47,7 @@ class Driver(BaseModel):
     # overall_traveled_km = Column(String)
     # car_model = Column(String)
     disabled: bool = Field(default=True)
-    driver_id: str = Field(default_factory=unique_id.generate_custom_id())
+    driver_id: str = Field(default_factory=unique_id.generate_custom_id)
 
     # plate_number = Column(String)
     created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S.%f"))
