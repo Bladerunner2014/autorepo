@@ -3,11 +3,11 @@ version: '3'
 services:
   auto:
     build: .
-    command: sh -c "uvicorn main:app --host 0.0.0.0 --port 8001"
+    command: sh -c "uvicorn main:app --host 0.0.0.0 --port 8000"
     volumes:
       - logs:/log
     ports:
-      - "8000:8000"
+      - "8001:8000"
     environment:
       - MONGO_DB=auto  # Add this line to define the database name
       - MONGO_PORT=27017  # Ensure the port is correctly defined
