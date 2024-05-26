@@ -26,10 +26,10 @@ class DriverManager:
             return ORJSONResponse(content={"message": InfoMessage.DUPLICATE_DRIVER},
                                   status_code=status.HTTP_400_BAD_REQUEST)
 
-        res = self.dao.insert_one(document=driver.model_dump())
+        res = self.dao.insert_one(document=driver.dict())
         # logger.info(InfoMessage.CREATE_DRIVER)
 
-        return ORJSONResponse(content=res, status_code=status.HTTP_200_OK)
+        return ORJSONResponse(content=driver.phone_number, status_code=status.HTTP_200_OK)
 
     def reader(self, phone_number: str) -> ORJSONResponse:
         res = self.dao.find_one(condition={"phone_number": phone_number})
