@@ -19,10 +19,11 @@ class Dao:
 
     def insert_one(self, document: dict):
         try:
-            self.db.insert_one(document)
+            res = self.db.insert_one(document)
         except pymongo.errors as error:
             logger.error(error)
             raise error
+        return res
 
     def find(self, condition: dict):
         try:

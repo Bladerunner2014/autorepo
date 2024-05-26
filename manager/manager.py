@@ -75,7 +75,7 @@ class AutoManager:
         res = self.dao.insert_one(document=auto.dict())
         # logger.info(InfoMessage.CREATE_AUTO)
 
-        return ORJSONResponse(content=res, status_code=status.HTTP_200_OK)
+        return ORJSONResponse(content={"plate_number":auto.plate_number}, status_code=status.HTTP_200_OK)
 
     def all(self):
         autos = self.dao.find(condition={})

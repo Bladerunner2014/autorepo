@@ -24,19 +24,20 @@ class Auto(BaseModel):
     car_model: str
     disabled: bool = Field(default=True)
     color: str
-    created_at: str = Field(default=datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S.%f"))
-    car_id: str = Field(default=unique_id.generate_custom_id())
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S.%f"))
+    car_id: str = Field(default_factory=unique_id.generate_custom_id())
 
-    class Config:
-        schema_extra = {
-            "example": {
-                "fullname": "John Doe",
-                "email": "jdoe@x.edu.ng",
-                "course_of_study": "Water resources and environmental engineering",
-                "year": 4,
-                "gpa": "4.0",
-            }
+
+class Config:
+    schema_extra = {
+        "example": {
+            "fullname": "John Doe",
+            "email": "jdoe@x.edu.ng",
+            "course_of_study": "Water resources and environmental engineering",
+            "year": 4,
+            "gpa": "4.0",
         }
+    }
 
 
 class Driver(BaseModel):
@@ -46,10 +47,10 @@ class Driver(BaseModel):
     # overall_traveled_km = Column(String)
     # car_model = Column(String)
     disabled: bool = Field(default=True)
-    driver_id: str = Field(default=unique_id.generate_custom_id())
+    driver_id: str = Field(default_factory=unique_id.generate_custom_id())
 
     # plate_number = Column(String)
-    created_at: str = Field(default=datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S.%f"))
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S.%f"))
 
     # last_trip = Column(String, default=datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S.%f"))
     # assigned_car = Column(String)
