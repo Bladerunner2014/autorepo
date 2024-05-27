@@ -1,6 +1,6 @@
 from schemas import schemas
 from dotenv import dotenv_values
-from fastapi import FastAPI
+from fastapi import FastAPI, Header
 import logging
 # from log import log
 from fastapi.middleware.cors import CORSMiddleware
@@ -40,8 +40,8 @@ def read_autos():
     return res
 
 
-@app.get("/auto/{auto_plate}", response_model=schemas.Auto, tags=["Auto"])
-def read_auto(auto_plate):
+@app.get("/auto/plate", response_model=schemas.Auto, tags=["Auto"])
+def read_auto(auto_plate: str = Header(...)):
     m = AutoManager()
     res = m.reader(auto_plate)
 
@@ -80,8 +80,8 @@ def read_drivers():
     return res
 
 
-@app.get("/driver/{phone_number}", response_model=schemas.Auto, tags=["Driver"])
-def read_driver(phone_number):
+@app.get("/driver/phone/", response_model=schemas.Auto, tags=["Driver"])
+def read_driver(phone_number:str = Header(...)):
     m = DriverManager()
     res = m.reader(phone_number)
 
@@ -123,8 +123,8 @@ def read_services():
     return res
 
 
-@app.get("/service/{service_id}", response_model=schemas.Service, tags=["Service"])
-def read_service(service_id):
+@app.get("/service/service", response_model=schemas.Service, tags=["Service"])
+def read_service(service_id:str = Header(...)):
     handler = Service()
     res = handler.reader(service_id)
 
@@ -145,5 +145,6 @@ def update_service(service_id, service: dict):
     res = handler.update(service_id=service_id, new_values=service)
 
     return res
+
 
 # log.setup_logger()
