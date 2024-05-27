@@ -81,7 +81,7 @@ def read_drivers():
 
 
 @app.get("/driver/phone/", response_model=schemas.Auto, tags=["Driver"])
-def read_driver(phone_number:str = Header(...)):
+def read_driver(phone_number: str = Header(...)):
     m = DriverManager()
     res = m.reader(phone_number)
 
@@ -124,7 +124,7 @@ def read_services():
 
 
 @app.get("/service/service", response_model=schemas.Service, tags=["Service"])
-def read_service(service_id:str = Header(...)):
+def read_service(service_id: str = Header(...)):
     handler = Service()
     res = handler.reader(service_id)
 
@@ -145,6 +145,5 @@ def update_service(service_id, service: dict):
     res = handler.update(service_id=service_id, new_values=service)
 
     return res
-
 
 # log.setup_logger()
