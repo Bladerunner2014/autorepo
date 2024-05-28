@@ -10,8 +10,8 @@ services:
       - logs:/log
     ports:
       - "8001:8001"
-    networks:
-      - linkcar
+#    networks:
+#      - linkcar
     environment:
       - MONGO_DB=auto  # Add this line to define the database name
       - MONGO_PORT=27017  # Ensure the port is correctly defined
@@ -23,7 +23,7 @@ services:
       - "27017"
 volumes:
   logs:
-networks:
-  linkcar:
-    external: true
+#networks:
+#  linkcar:
+#    external: true
 
