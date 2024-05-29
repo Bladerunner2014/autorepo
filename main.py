@@ -107,7 +107,7 @@ def update_driver(phone_number, driver: dict):
 """Services"""
 
 
-@app.post("/service/", response_model=schemas.Service, tags=["Service"])
+@app.post("/service/", tags=["Service"])
 def create_service(service: schemas.Service):
     handler = Service()
     res = handler.creator(service)
