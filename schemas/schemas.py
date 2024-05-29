@@ -15,6 +15,11 @@ class Service(BaseModel):
     cost_per_service: Optional[str] = None
     created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S.%f"))
 
+    def __init__(self, **data):
+        super().__init__(**data)
+        self.service_id = unique_id.generate_custom_id()
+        self.created_at = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S.%f")
+
 
 class Auto(BaseModel):
     plate_number: str

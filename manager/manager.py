@@ -6,14 +6,13 @@ from dao.dao import Dao
 from constants.info_message import InfoMessage
 from constants.error_message import ErrorMessage
 from schemas import schemas
-from models import models
 
-# from log import log
+from log import log
 
 config = dotenv_values(".env")
 
 
-# logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class DriverManager:
@@ -27,7 +26,7 @@ class DriverManager:
                                   status_code=status.HTTP_400_BAD_REQUEST)
 
         res = self.dao.insert_one(document=driver.dict())
-        # logger.info(InfoMessage.CREATE_DRIVER)
+        logger.info(InfoMessage.CREATE_DRIVER)
 
         return ORJSONResponse(content=driver.phone_number, status_code=status.HTTP_200_OK)
 
@@ -114,10 +113,14 @@ class Service:
         self.dao = Dao(config["MONGO_DB_SERVICE_COLLECTION"])
 
     def creator(self, service: schemas.Service) -> ORJSONResponse:
+        check = self.dao.find_one(condition={"title": service.plate_number})
+        if check:
+            return ORJSONResponse(content={"message": ErrorMessage.DUPLICATE_SERVICE},
+                                  status_code=status.HTTP_400_BAD_REQUEST)
         res = self.dao.insert_one(document=service.dict())
-        # logger.info(InfoMessage.CREATE_DRIVER)
+        logger.info(InfoMessage.DB_INSERT)
 
-        return ORJSONResponse(content={"message": InfoMessage.DB_INSERT}, status_code=status.HTTP_200_OK)
+        return ORJSONResponse(content={"message": service.title}, status_code=status.HTTP_200_OK)
 
     def reader(self, service_id: str) -> ORJSONResponse:
         res = self.dao.find_one(condition={"service_id": service_id})
@@ -150,4 +153,4 @@ class Service:
         u = self.dao.update(condition={"service_id": service_id}, new_values=new_values)
         return ORJSONResponse(content=u, status_code=status.HTTP_200_OK)
 
-    # log.setup_logger()
+log.setup_logger()

@@ -14,6 +14,6 @@ class ErrorMessage:
     DB_SELECT = "db select error"
     DB_DELETE = "document delete failed"
     DISABLED = "driver or auto is disabled"
-
+    DUPLICATE_SERVICE = "duplicate service title"
     FILE = "File too large"
     ROLE = "User role is not consistent with the request"
