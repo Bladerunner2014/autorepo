@@ -31,7 +31,10 @@ class Auto(BaseModel):
     color: str
     created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S.%f"))
     car_id: str = Field(default_factory=unique_id.generate_custom_id)  # Pass the method without calling it
-
+    def __init__(self, **data):
+        super().__init__(**data)
+        self.car_id = unique_id.generate_custom_id()
+        self.created_at = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S.%f")
 
 class Config:
     schema_extra = {
@@ -59,6 +62,11 @@ class Driver(BaseModel):
 
     # last_trip = Column(String, default=datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S.%f"))
     # assigned_car = Column(String)
+    def __init__(self, **data):
+        super().__init__(**data)
+        self.driver_id = unique_id.generate_custom_id()
+        self.created_at = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S.%f")
+
     class Config:
         schema_extra = {
             "example": {
