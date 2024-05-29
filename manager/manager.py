@@ -117,7 +117,7 @@ class Service:
         res = self.dao.insert_one(document=service.dict())
         # logger.info(InfoMessage.CREATE_DRIVER)
 
-        return ORJSONResponse(content=res, status_code=status.HTTP_200_OK)
+        return ORJSONResponse(content={"message": InfoMessage.DB_INSERT}, status_code=status.HTTP_200_OK)
 
     def reader(self, service_id: str) -> ORJSONResponse:
         res = self.dao.find_one(condition={"service_id": service_id})
