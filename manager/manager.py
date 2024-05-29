@@ -113,7 +113,7 @@ class Service:
         self.dao = Dao(config["MONGO_DB_SERVICE_COLLECTION"])
 
     def creator(self, service: schemas.Service) -> ORJSONResponse:
-        check = self.dao.find_one(condition={"title": service.plate_number})
+        check = self.dao.find_one(condition={"title": service.title})
         if check:
             return ORJSONResponse(content={"message": ErrorMessage.DUPLICATE_SERVICE},
                                   status_code=status.HTTP_400_BAD_REQUEST)
